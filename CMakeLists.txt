@@ -1,11 +1,15 @@
 cmake_minimum_required(VERSION 2.8.11)
 project(jsonrpc-cpp CXX)
 
+option(WITH_CURL "Build HTTP Client" OFF)
+
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 conan_basic_setup()
 
 find_package(Threads REQUIRED)
-find_package(CURL)
+if(WITH_CURL)
+    find_package(CURL REQUIRED)
+endif(WITH_CURL)
 
 set(EXTRA_LIBS ${CMAKE_THREAD_LIBS_INIT})
 if (WIN32)

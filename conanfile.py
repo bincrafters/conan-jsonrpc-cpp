@@ -39,6 +39,7 @@ class JsonRpcCppConan(ConanFile):
 
     def configure_cmake(self):
         cmake = CMake(self)
+        cmake.definitions["WITH_CURL"] = self.options.with_curl
         cmake.configure()
         return cmake
 
