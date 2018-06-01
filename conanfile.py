@@ -37,8 +37,12 @@ class JsonRpcCppConan(ConanFile):
     def configure_autotools(self):
         if not self.autotools:
             with tools.chdir(self.source_subfolder):
-                self.run("./autogen.sh")
-                self.autotools = AutoToolsBuildEnvironment(self)
+                command = "./autogen.sh"
+                if tools.os_info.is_windows:
+                    tools.run_in_windows_bash(self, command)
+                else:
+                    self.run(command)
+                self.autotools = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)
                 configure_args = ['--disable-static' if self.options.shared else '--disable-shared']
                 self.autotools.configure(args=configure_args)
         return self.autotools
