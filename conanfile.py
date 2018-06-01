@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conans import ConanFile, AutoToolsBuildEnvironment, tools
+from conans import ConanFile, CMake, tools
 import os
 
 
@@ -14,52 +14,49 @@ class JsonRpcCppConan(ConanFile):
     author = "Bincrafters <bincrafters@gmail.com>"
     license = "LGPL-3"
     exports = ["LICENSE.md"]
+    exports_sources = ["CMakeLists.txt"]
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True"
+    options = {"shared": [True, False], "fPIC": [True, False], "with_curl":[True, False]}
+    default_options = "shared=False", "fPIC=True", "with_curl=False"
     source_subfolder = "source_subfolder"
     requires = "jsoncpp/1.0.0@theirix/stable"
+    generators = "cmake"
     autotools = None
 
     def config_options(self):
         if self.settings.os == 'Windows':
             del self.options.fPIC
 
+    def requirements(self):
+        if self.options.with_curl:
+            self.requires.add("libcurl/7.50.3@bincrafters/stable")
+
     def source(self):
         source_url = "https://cfhcable.dl.sourceforge.net/project/jsonrpc-cpp/jsonrpc-cpp"
         tools.get("{0}/jsonrpc-cpp-{1}.tar.bz2".format(source_url, self.version))
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
-        configure_ac = os.path.join(self.source_subfolder, "configure.ac")
-        tools.replace_in_file(configure_ac, "examples='yes'", "examples='no'")
-        tools.replace_in_file(configure_ac, "doc='yes'", "doc='no'")
 
-    def configure_autotools(self):
-        if not self.autotools:
-            with tools.chdir(self.source_subfolder):
-                command = "./autogen.sh"
-                if tools.os_info.is_windows:
-                    tools.run_in_windows_bash(self, command)
-                else:
-                    self.run(command)
-                self.autotools = AutoToolsBuildEnvironment(self, win_bash=tools.os_info.is_windows)
-                configure_args = ['--disable-static' if self.options.shared else '--disable-shared']
-                self.autotools.configure(args=configure_args)
-        return self.autotools
+    def configure_cmake(self):
+        cmake = CMake(self)
+        cmake.configure()
+        return cmake
 
     def build(self):
-        autotools = self.configure_autotools()
-        with tools.chdir(self.source_subfolder):
-            autotools.make()
+        cmake = self.configure_cmake()
+        cmake.build()
 
     def package(self):
         self.copy(pattern="LICENSE", dst="licenses", src=self.source_subfolder)
         self.copy(pattern="COPYING.*", dst="licenses", src=self.source_subfolder)
-        autotools = self.configure_autotools()
-        with tools.chdir(self.source_subfolder):
-            autotools.make(["install"])
+        cmake = CMake(self)
+        cmake.install()
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
         if self.settings.os == "Linux":
             self.cpp_info.libs.append("pthread")
+        elif self.settings.os == "Windows":
+            self.cpp_info.libs.append("ws2_32")
+        if self.options.with_curl:
+            self.cpp_info.defines = ["CURL_ENABLED"]
