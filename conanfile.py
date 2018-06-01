@@ -3,7 +3,6 @@
 
 from conans import ConanFile, AutoToolsBuildEnvironment, tools
 import os
-import shutil
 
 
 class JsonRpcCppConan(ConanFile):
@@ -31,14 +30,16 @@ class JsonRpcCppConan(ConanFile):
         tools.get("{0}/jsonrpc-cpp-{1}.tar.bz2".format(source_url, self.version))
         extracted_dir = self.name + "-" + self.version
         os.rename(extracted_dir, self.source_subfolder)
+        configure_ac = os.path.join(self.source_subfolder, "configure.ac")
+        tools.replace_in_file(configure_ac, "examples='yes'", "examples='no'")
+        tools.replace_in_file(configure_ac, "doc='yes'", "doc='no'")
 
     def configure_autotools(self):
         if not self.autotools:
             with tools.chdir(self.source_subfolder):
                 self.run("./autogen.sh")
                 self.autotools = AutoToolsBuildEnvironment(self)
-                configure_args = ['--enable-examples=no', '--enable-doc=no']
-                configure_args.append('--disable-static' if self.options.shared else '--disable-shared')
+                configure_args = ['--disable-static' if self.options.shared else '--disable-shared']
                 self.autotools.configure(args=configure_args)
         return self.autotools
 
@@ -53,7 +54,6 @@ class JsonRpcCppConan(ConanFile):
         autotools = self.configure_autotools()
         with tools.chdir(self.source_subfolder):
             autotools.make(["install"])
-        shutil.rmtree(os.path.join(self.package_folder, "share"))
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
