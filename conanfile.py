@@ -17,8 +17,8 @@ class JsonRpcCppConan(ConanFile):
     exports_sources = ["CMakeLists.txt"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "with_curl":[True, False]}
-    default_options = "shared=False", "fPIC=True", "with_curl=False"
-    source_subfolder = "source_subfolder"
+    default_options = {'shared': False, 'fPIC': True, 'with_curl': False}
+    _source_subfolder = "source_subfolder"
     requires = "jsoncpp/1.0.0@theirix/stable"
     generators = "cmake"
     autotools = None
@@ -35,21 +35,21 @@ class JsonRpcCppConan(ConanFile):
         source_url = "https://cfhcable.dl.sourceforge.net/project/jsonrpc-cpp/jsonrpc-cpp"
         tools.get("{0}/jsonrpc-cpp-{1}.tar.bz2".format(source_url, self.version))
         extracted_dir = self.name + "-" + self.version
-        os.rename(extracted_dir, self.source_subfolder)
+        os.rename(extracted_dir, self._source_subfolder)
 
-    def configure_cmake(self):
+    def _configure_cmake(self):
         cmake = CMake(self)
         cmake.definitions["WITH_CURL"] = self.options.with_curl
         cmake.configure()
         return cmake
 
     def build(self):
-        cmake = self.configure_cmake()
+        cmake = self._configure_cmake()
         cmake.build()
 
     def package(self):
-        self.copy(pattern="LICENSE", dst="licenses", src=self.source_subfolder)
-        self.copy(pattern="COPYING.*", dst="licenses", src=self.source_subfolder)
+        self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
+        self.copy(pattern="COPYING.*", dst="licenses", src=self._source_subfolder)
         cmake = CMake(self)
         cmake.install()
 

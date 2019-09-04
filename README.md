@@ -2,7 +2,7 @@
 
 | Bintray | Windows | Linux & macOS |
 |:--------:|:---------:|:-----------------:|
-|[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/jsonrpc-cpp%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/jsonrpc-cpp%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-jsonrpc-cpp?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-jsonrpc-cpp)|[![Build Status](https://travis-ci.org/bincrafters/conan-jsonrpc-cpp.svg)](https://travis-ci.org/bincrafters/conan-jsonrpc-cpp)|
+|[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/jsonrpc-cpp%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/jsonrpc-cpp%3Abincrafters/_latestVersion)|[![Build status](https://ci.appveyor.com/api/projects/status/github/bincrafters/conan-jsonrpc-cpp?svg=true)](https://ci.appveyor.com/project/BinCrafters/conan-jsonrpc-cpp)|[![Build Status](https://travis-ci.com/bincrafters/conan-jsonrpc-cpp.svg)](https://travis-ci.com/bincrafters/conan-jsonrpc-cpp)|
 
 ## Conan.io Information
 
