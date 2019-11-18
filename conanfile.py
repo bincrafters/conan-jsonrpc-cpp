@@ -8,7 +8,6 @@ class JsonRpcCppConan(ConanFile):
     description = "JsonRpc-Cpp project is an implementation of JSON-RPC protocol in C++"
     homepage = "http://jsonrpc-cpp.sourceforge.net/"
     url = "https://github.com/bincrafters/conan-jsonrpc-cpp"
-    author = "Bincrafters <bincrafters@gmail.com>"
     license = "LGPL-3"
     exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
