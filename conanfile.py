@@ -15,7 +15,7 @@ class JsonRpcCppConan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False], "with_curl":[True, False]}
     default_options = {'shared': False, 'fPIC': True, 'with_curl': False}
     _source_subfolder = "source_subfolder"
-    requires = "jsoncpp/1.0.0@theirix/stable"
+    requires = "jsoncpp/1.9.2"
     generators = "cmake"
     autotools = None
 
@@ -25,7 +25,7 @@ class JsonRpcCppConan(ConanFile):
 
     def requirements(self):
         if self.options.with_curl:
-            self.requires.add("libcurl/7.50.3@bincrafters/stable")
+            self.requires.add("libcurl/7.67.0")
 
     def source(self):
         source_url = "https://cfhcable.dl.sourceforge.net/project/jsonrpc-cpp/jsonrpc-cpp"
