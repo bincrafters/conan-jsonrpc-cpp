@@ -9,7 +9,6 @@ class JsonRpcCppConan(ConanFile):
     homepage = "http://jsonrpc-cpp.sourceforge.net/"
     url = "https://github.com/bincrafters/conan-jsonrpc-cpp"
     license = "LGPL-3"
-    exports = ["LICENSE.md"]
     exports_sources = ["CMakeLists.txt"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "with_curl":[True, False]}
