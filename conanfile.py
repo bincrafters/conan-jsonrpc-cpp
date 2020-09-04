@@ -24,7 +24,7 @@ class JsonRpcCppConan(ConanFile):
 
     def requirements(self):
         if self.options.with_curl:
-            self.requires.add("libcurl/7.67.0")
+            self.requires("libcurl/7.67.0")
 
     def source(self):
         source_url = "https://cfhcable.dl.sourceforge.net/project/jsonrpc-cpp/jsonrpc-cpp"
