@@ -14,7 +14,7 @@ class JsonRpcCppConan(ConanFile):
     options = {"shared": [True, False], "fPIC": [True, False], "with_curl":[True, False]}
     default_options = {'shared': False, 'fPIC': True, 'with_curl': False}
     _source_subfolder = "source_subfolder"
-    requires = "jsoncpp/1.9.2"
+    requires = "jsoncpp/1.9.4"
     generators = "cmake"
     autotools = None
 
